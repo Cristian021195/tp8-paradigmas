@@ -78,16 +78,52 @@ listaNaturalesPM 0 = [0]
 listaNaturalesPM x = [0..x]
 -}
 listarNaturalesGuards x
-    | (x < 1) = []
-    | (x >= 1) = [x] ++ listarNaturalesGuards (x-1)
+    | (x <= 1) = [1]
+    | (x > 1) = [x] ++ listarNaturalesGuards(x-1)
 
 listarNaturalesPM 0 = []
+listarNaturalesPM 1 = [1] 
+listarNaturalesPM n = [n] ++ listarNaturalesPM(n-1)
 
-listarNaturalesGuardsAlt x
-    | (x < 1) = []
-    | (x >= 1) = [x]listarNaturalesGuards (x-1)
+listarNaturalesLC n = [x | x <- [1..n]]
 
--- sublista x y = [i | i <- y, x < i]
+sublista x ys = [i | i <- ys, x < i]
+
+pordos x = x*2
+portres x = x*3
+
+transformar :: (a -> b) -> [a] -> [b] 
+transformar _ [] = [] 
+transformar f (x:xs) = f x : transformar f xs
+
+-- Composicion: ejemplo fg 3 = 10
+g x = x^2 
+f x = x + 1 
+fg = f . g
+
+
+tablaDePares n = [2*x | x <- [0..n/2]]
+
+
+
+esPositivo x = x > 0
+esNegativo x = x < 0
+-- verificar ::[Int] -> f -> Bool
+verificar [] f = True
+verificar (x:xs) f = if f x then verificar xs f else False
+{-
+sumaLista ::[Int] -> Int
+sumaLista [] = 0
+sumaLista (x:xs) = x + sumaLista xs
+-}
+
+--contarigualesalt (x:xs) y = if y==x then 1 + contarigualesalt xs y else contarigualesalt xs y
+-- transformar 
+
+    
+    -- | (x >= 1) = [x]listarNaturalesGuards (x-1)
+
+
 
 -- diferencia = [1,2,3]
 -- (x:xs) y = if y==x then True else pertenece xs y
