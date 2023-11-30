@@ -81,9 +81,16 @@ doble x = 2*x
 se encuentran en el intervalo [ 0,n]. Use List Comprehension. --}
 tablaDePares n = [2*x | x <- [0..(n-1)/2]]
 
-{-- #j - pendiente : que recibe un predicado p (un predicado es una función que devuelve un valor booleano) y una 
+{-- #j - consultado : que recibe un predicado p (un predicado es una función que devuelve un valor booleano) y una 
 lista de elementos xs y devuelve True si todos los elementos de la lista satisfacen el predicado, caso
 contrario retorna False. Realice una versión con Guards --}
+--verificarG [] f = False
+verificarG as f
+    | null as = False
+    | (length as == 0) = if f (head as) then True else False
+    | f (head a) = verificarG (tail as) f
+    | otherwise = False
+
 verificar [] f = False
 verificar (a:as) f
     | (length as == 0) = if f a then True else False
@@ -109,6 +116,12 @@ filtrarListaG _ [] = []
 filtrarListaG f (x:xs)
     | f x = x : filtrarListaG f xs
     | otherwise = filtrarListaG f xs 
+
+filtrarListaG2 :: (a -> Bool) -> [a] -> [a]
+filtrarListaG2 f xs
+    | null xs = []
+    | f (head xs) = (head xs) : filtrarListaG2 f (tail xs)
+    | otherwise = filtrarListaG2 f (tail xs) 
 
 filtrarListaLC :: (a -> Bool) -> [a] -> [a]
 filtrarListaLC f lc = [c | c <- lc, f c]
