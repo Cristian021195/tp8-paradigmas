@@ -53,11 +53,11 @@ sublista :: [Int] -> Int -> [Int]
 sublista ys x = [i | i <- ys, x < i]
 
 -- #g : que reciba dos listas y devuelva una nueva lista con los elementos de la primera lista que no están en la segunda lista
-diferencia :: [Int] -> [Int] -> [Int]
-diferencia [] _ = []
-diferencia _ [] = []
-diferencia (x:xs) (y:ys)
-    | 
+diferencia :: [Int] -> [Int]-> [Int] -> [Int]
+diferencia [] _ [] = []
+diferencia (x:xs) (y:ys) z
+    | x == y = diferencia xs ys z
+    | otherwise = z ++ diferencia xs ys z
 
 existe :: [Int] -> Int -> Bool
 existe [] _ = False
@@ -65,22 +65,53 @@ existe (x:xs) y
     | x == y = True
     | otherwise = existe xs y
 
-
--- #h
+{-- #h: 
+    que reciba como parámetros una función f (de un argumento) y una lista y devuelva como 
+    resultado la lista recibida en la que cada uno de sus elementos haya sido transformado con la función f
+        transformar doble [1,2,3]
+        transformar (\x->x*3) [1,2,3]
+ --}
 transformar :: (a -> b) -> [a] -> [b] 
 transformar _ [] = [] 
 transformar f (x:xs) = f x : transformar f xs
 
--- #i
-tablaDePares n = [2*x | x <- [0..n/2]]
+doble x = 2*x
 
--- #j - pendiente
-verificar [] f = True
-verificar (x:xs) f = if f x then verificar xs f else False
+{-- #i : que, dado un número natural n, construya una lista que contenga los números pares que 
+se encuentran en el intervalo [ 0,n]. Use List Comprehension. --}
+tablaDePares n = [2*x | x <- [0..(n-1)/2]]
 
--- #k
+{-- #j - pendiente : que recibe un predicado p (un predicado es una función que devuelve un valor booleano) y una 
+lista de elementos xs y devuelve True si todos los elementos de la lista satisfacen el predicado, caso
+contrario retorna False. Realice una versión con Guards --}
+verificar [] f = False
+verificar (a:as) f
+    | (length as == 0) = if f a then True else False
+    | f a = verificar as f
+    | otherwise = False
 
--- #i
+verificarPM [] f = True
+verificarPM (x:xs) f = if f x then verificarPM xs f else False
+
+{-- #k : que reciba una función f y dos listas y retorne una nueva lista que resulta de la combinación las 
+listas aplicando la función f. La función f debe recibir como parámetro un elemento de cada lista a combinar 
+por vez. Utilice la siguiente definición de tipo para su función: 
+combinarCon :: (a -> b -> c) -> [a] -> [b] -> [c] --}
+
+{-- #i : que reciba un predicado y una lista y luego regresa la lista de elementos que satisfacen el 
+predicado. La signatura de la función debería ser:
+filtrarLista :: (a -> Bool) -> [a] -> [a] 
+i. Realice una versión con guards
+ii. Realice una versión con list comprehension --}
+
+filtrarListaG :: (a -> Bool) -> [a] -> [a]
+filtrarListaG _ [] = []
+filtrarListaG f (x:xs)
+    | f x = x : filtrarListaG f xs
+    | otherwise = filtrarListaG f xs 
+
+filtrarListaLC :: (a -> Bool) -> [a] -> [a]
+filtrarListaLC f lc = [c | c <- lc, f c]
 
 
 -- PRACTICAS SIMPLES
