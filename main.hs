@@ -65,6 +65,12 @@ existe (x:xs) y
     | x == y = True
     | otherwise = existe xs y
 
+-- consultar xq no funciona existeGuards [1,2,3] 3
+existeGuards (x:xs) y
+    | null xs = False
+    | x == y = True
+    | otherwise = existeGuards xs y
+
 {-- #h: 
     que reciba como parámetros una función f (de un argumento) y una lista y devuelva como 
     resultado la lista recibida en la que cada uno de sus elementos haya sido transformado con la función f
@@ -83,27 +89,37 @@ tablaDePares n = [2*x | x <- [0..(n-1)/2]]
 
 {-- #j - consultado : que recibe un predicado p (un predicado es una función que devuelve un valor booleano) y una 
 lista de elementos xs y devuelve True si todos los elementos de la lista satisfacen el predicado, caso
-contrario retorna False. Realice una versión con Guards --}
---verificarG [] f = False
-verificarG as f
+contrario retorna False. Realice una versión con Guards, ejecucion (\x x->x>3) [4,5,6] --}
+
+verificarGuards f as
     | null as = False
-    | (length as == 0) = if f (head as) then True else False
-    | f (head a) = verificarG (tail as) f
+    | (length as == 1) = if f (head as) then True else False
+    | f (head as) = verificarGuards f (tail as)
     | otherwise = False
 
-verificar [] f = False
-verificar (a:as) f
+verificarM [] f = False
+verificarM (a:as) f
     | (length as == 0) = if f a then True else False
-    | f a = verificar as f
+    | f a = verificarM as f
     | otherwise = False
 
-verificarPM [] f = True
-verificarPM (x:xs) f = if f x then verificarPM xs f else False
+verificarPM [] f = False
+verificarPM (x:xs) f = 
+    if (length xs == 0) then f x 
+    else if f x then verificarPM xs f else False
 
-{-- #k : que reciba una función f y dos listas y retorne una nueva lista que resulta de la combinación las 
+{-- #k - consultar : que reciba una función f y dos listas y retorne una nueva lista que resulta de la combinación las 
 listas aplicando la función f. La función f debe recibir como parámetro un elemento de cada lista a combinar 
 por vez. Utilice la siguiente definición de tipo para su función: 
 combinarCon :: (a -> b -> c) -> [a] -> [b] -> [c] --}
+--combinarConLC :: (a -> b -> c) -> [a] -> [b] -> [c]
+-- combinarCon (\x -> x>2) [1,2,3,4,5] [3,5]
+combinarCon f xs [] = xs
+combinarCon f [] ys = ys
+combinarCon f (y:ys) (x:xs) =
+    if f x then x:combinarCon f ys xs
+    else if f y then y:combinarCon f ys xs
+    else combinarCon f ys xs
 
 {-- #i : que reciba un predicado y una lista y luego regresa la lista de elementos que satisfacen el 
 predicado. La signatura de la función debería ser:
