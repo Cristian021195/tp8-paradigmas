@@ -65,11 +65,12 @@ existe (x:xs) y
     | x == y = True
     | otherwise = existe xs y
 
--- consultar xq no funciona existeGuards [1,2,3] 3
-existeGuards (x:xs) y
+existeG :: [Int] -> Int -> Bool
+existeG xs y
     | null xs = False
-    | x == y = True
-    | otherwise = existeGuards xs y
+    | (length xs == 1) = False || ((head xs) == y)
+    | (head xs) == y = True
+    | otherwise = existeG (tail xs) y
 
 {-- #h: 
     que reciba como parámetros una función f (de un argumento) y una lista y devuelva como 
@@ -87,7 +88,7 @@ doble x = 2*x
 se encuentran en el intervalo [ 0,n]. Use List Comprehension. --}
 tablaDePares n = [2*x | x <- [0..(n-1)/2]]
 
-{-- #j - consultado : que recibe un predicado p (un predicado es una función que devuelve un valor booleano) y una 
+{-- #j : que recibe un predicado p (un predicado es una función que devuelve un valor booleano) y una 
 lista de elementos xs y devuelve True si todos los elementos de la lista satisfacen el predicado, caso
 contrario retorna False. Realice una versión con Guards, ejecucion (\x x->x>3) [4,5,6] --}
 
@@ -108,14 +109,20 @@ verificarPM (x:xs) f =
     if (length xs == 0) then f x 
     else if f x then verificarPM xs f else False
 
-{-- #k - consultar : que reciba una función f y dos listas y retorne una nueva lista que resulta de la combinación las 
+{-- #k : que reciba una función f y dos listas y retorne una nueva lista que resulta de la combinación las 
 listas aplicando la función f. La función f debe recibir como parámetro un elemento de cada lista a combinar 
 por vez. Utilice la siguiente definición de tipo para su función: 
 combinarCon :: (a -> b -> c) -> [a] -> [b] -> [c] --}
 --combinarConLC :: (a -> b -> c) -> [a] -> [b] -> [c]
 -- combinarCon (\x -> x>2) [1,2,3,4,5] [3,5]
-combinarCon f xs [] = xs
-combinarCon f [] ys = ys
+combinarCon f xs []
+    | null xs = []
+    | f (head xs) = (head xs): combinar f (tail xs) []
+    | otherwise = combinar f (tail xs) []
+combinarCon f [] ys
+    | null ys = []
+    | f (head ys) = (head ys): combinar f (tail ys) []
+    | otherwise = combinar f (tail ys) []
 combinarCon f (y:ys) (x:xs) =
     if f x then x:combinarCon f ys xs
     else if f y then y:combinarCon f ys xs
