@@ -115,7 +115,7 @@ por vez. Utilice la siguiente definición de tipo para su función:
 combinarCon :: (a -> b -> c) -> [a] -> [b] -> [c] --}
 --combinarConLC :: (a -> b -> c) -> [a] -> [b] -> [c]
 -- combinarCon (\x -> x>2) [1,2,3,4,5] [3,5]
-combinarCon f xs []
+{--combinarCon f xs []
     | null xs = []
     | f (head xs) = (head xs): combinar f (tail xs) []
     | otherwise = combinar f (tail xs) []
@@ -127,7 +127,7 @@ combinarCon f (y:ys) (x:xs) =
     if f x then x:combinarCon f ys xs
     else if f y then y:combinarCon f ys xs
     else combinarCon f ys xs
-
+--}
 {-- #i : que reciba un predicado y una lista y luego regresa la lista de elementos que satisfacen el 
 predicado. La signatura de la función debería ser:
 filtrarLista :: (a -> Bool) -> [a] -> [a] 
@@ -149,13 +149,35 @@ filtrarListaG2 f xs
 filtrarListaLC :: (a -> Bool) -> [a] -> [a]
 filtrarListaLC f lc = [c | c <- lc, f c]
 
+funquiz h a xs 
+    | null xs = []
+    | a <=0 = []
+    | otherwise = h (head xs) : funquiz h (a-1) (tail xs)
 
+--f (\a ->a-1) 4 [1,2,3,4,5]
 -- PRACTICAS SIMPLES
 suma x y = x + y
 -- 111 `mod` 111
 
--- Composicion
+mastra xs a b = [z | z<-xs, a<= z &&  z<=  b]
+mostro xs a b = [1 | z<-xs, a<= z &&  z<=  b]
+maestro xs a b = sum [1 | z<-xs, a<= z &&  z<=  b]
+
+-- Composicion: solo las tenemos que definir en consola
 g x = x^2 
 f x = x + 1 
 fg = f . g
 
+f1 x = x + 1
+
+misterio4 f n xs 
+    | null xs = []
+    | n <=0 = xs
+    | f (head xs) = misterio4 f  (n-1) (tail xs)
+    | otherwise = f (head xs) :  misterio4 f  n (tail xs)
+
+misterio5 f n xs 
+    | null xs = []
+    | n <=0 = []
+    | f (head xs) = f (head xs) : misterio5 f  (n-1) (tail xs)
+    | otherwise =  misterio5 f  n (tail xs)
